@@ -92,6 +92,14 @@ export default function New() {
  
   const handlePersona = async () => {
     try {
+      if(dni === ""){
+        Swal.fire({
+          title: "De Que Va Esto?", 
+          text: "Parece Que no Ingresaste ningun DNI",
+          icon: "error",
+        });  
+        return
+      }
       const persona: NewPersona = {
         nombre: nombre,
         dni: dni,
@@ -179,6 +187,7 @@ export default function New() {
               Contribuyente
             </span>
             <Input
+            isRequired
               type="text"
               label="DNI"
               value={dni}
