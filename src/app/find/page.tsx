@@ -4,11 +4,11 @@ import { useState } from "react";
 import ImageSlider from "@/components/ImageSlider";
 import { getFierrosByDniPersona, getPersonaByDni } from "@/config/crude";
 import Swal from "sweetalert2";
-import { Fierro, Persona } from "@/config/type";
+import { Persona } from "@/config/type";
 
 const Find: React.FC = () => {
   const [dni, setDni] = useState<string>("");
-  const [fierrosData, setFierrosData] = useState<{ url: string; fecha: string; folio: number; }[]>([]);
+  const [fierrosData, setFierrosData] = useState<{ url: string; fecha: string; folio: number; id:string }[]>([]);
   const [per, setPer] = useState<Persona | null>(null);
 
   const handleFierro = async () => {
@@ -29,7 +29,8 @@ const Find: React.FC = () => {
       const data = fierros.map(fierro => ({
         url: fierro.urlImagen,
         fecha: fierro.fecha,
-        folio: fierro.folio
+        folio: fierro.folio,
+        id: fierro.id
       }));
       setPer(pero)
       setFierrosData(data);

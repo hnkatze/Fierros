@@ -1,6 +1,6 @@
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 import { storage, db } from "./firebase";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
 import { Fierro, NewFierro, NewPersona, Persona } from "./type";
 
 export async function uploadImageAndGetUrl(file: File, name:string): Promise<string> {
@@ -67,4 +67,26 @@ export async function getFierrosByDniPersona(dniPersona: string): Promise<Fierro
   })) as Fierro[];
   
   return fierros;
+}
+export const deleteImage = async (imageUrl: string) => {
+  try {
+    // Crear una referencia a la imagen que deseas eliminar
+    const imageRef = ref(storage, imageUrl);
+
+    // Borrar la imagen
+    await deleteObject(imageRef);
+
+    console.log('Imagen borrada exitosamente');
+  } catch (error) {
+    console.error('Error al borrar la imagen:', error);
+  }
+};
+export async function deleteFierroById(fierroId: string): Promise<void> {
+  try {
+    const docRef = doc(db, "fierros", fierroId);
+    await deleteDoc(docRef);
+    console.log("Fierro eliminado con ID: ", fierroId);
+  } catch (e) {
+    console.error("Error al eliminar el fierro: ", e);
+  }
 }
