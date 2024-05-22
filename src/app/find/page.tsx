@@ -2,17 +2,21 @@
 import { Button, Input } from "@nextui-org/react";
 import { useState } from "react";
 import ImageSlider from "@/components/ImageSlider";
-import { getFierrosByDniPersona } from "@/config/crude";
+import { getFierrosByDniPersona, getPersonaByDni } from "@/config/crude";
 import Swal from "sweetalert2";
-import { Fierro } from "@/config/type";
+import { Fierro, Persona } from "@/config/type";
 
 const Find: React.FC = () => {
   const [dni, setDni] = useState<string>("");
-  const [images, setImages] = useState<string[]>([]);
+  const [fierrosData, setFierrosData] = useState<{ url: string; fecha: string; folio: number; }[]>([]);
+  const [per, setPer] = useState<Persona | null>(null);
 
   const handleFierro = async () => {
     try {
-      const fierros: Fierro[] = await getFierrosByDniPersona(dni);
+      const pero = await getPersonaByDni(dni);
+      const fierros = await getFierrosByDniPersona(dni);
+      console.log('fierros:', fierros);
+
       if (!fierros || fierros.length === 0) {
         Swal.fire({
           icon: 'warning',
@@ -21,10 +25,17 @@ const Find: React.FC = () => {
         });
         return;
       }
-      const imageUrls = fierros.map(fierro => fierro.urlImagen);
-      setImages(imageUrls);
+
+      const data = fierros.map(fierro => ({
+        url: fierro.urlImagen,
+        fecha: fierro.fecha,
+        folio: fierro.folio
+      }));
+      setPer(pero)
+      setFierrosData(data);
 
     } catch (error) {
+      console.error('Error fetching fierros:', error);
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -32,6 +43,9 @@ const Find: React.FC = () => {
       });
     }
   };
+
+
+
 
   return (
     <>
@@ -54,10 +68,16 @@ const Find: React.FC = () => {
             Buscar
           </Button>
         </div>
+        <div className=" flex flex-row gap-8">
+       <div className="text-white font-semibold flex flex-col pt-4">
+       <span className="text-3xl">{per?.nombre}</span>
+        <span className="text-2xl">{per?.dni}</span>
+        <span className="text-xl">{per?.direccion}</span>
+       </div>
         <div className=" w-72 pt-6  ">
-        <ImageSlider images={images} />
+        <ImageSlider data={fierrosData} />
         </div>
-        
+        </div>
       </div>
     </>
   );

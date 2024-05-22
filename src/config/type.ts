@@ -1,4 +1,4 @@
-import { TargetAndTransition } from "framer-motion";
+
 
 export type NewPersona = {
     dni: string;
