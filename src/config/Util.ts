@@ -33,3 +33,6 @@ export const compressImage = (file: File, maxWidth: number = 400, maxHeight: num
 export function parseTags(tagsString: string): Tags[] {
   return tagsString.split(',').map(tag => ({ tag: tag.trim() }));
 }
+export function convertStringToTagsArray(tagsString: string): string[] {
+  return tagsString.split(',').map(tag => tag.trim());
+}

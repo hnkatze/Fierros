@@ -13,9 +13,7 @@ export type NewPersona = {
     direccion: string;
   };
   
-  export type Tags = {
-    tag: string;
-  };
+ 
   
   export type NewFierro= {
     dniPersona:string;
@@ -25,7 +23,17 @@ export type NewPersona = {
     fecha: string;
     tags: Tags[];
   };
-
+  export type NewFierroArr= {
+    dniPersona:string;
+    urlImagen:string;
+    folio: number;
+    matricula: number;
+    fecha: string;
+    tags: string[];
+  };
+  export type Tags = {
+    tag: string;
+  };
   export type Fierro = {
     id:string;
     dniPersona:string;
@@ -33,9 +41,18 @@ export type NewPersona = {
     folio: number;
     matricula: number;
     fecha: string;
-    tags: Tags[];
+    tags: Tags[] | string[];
   };
   
+  export type FierroArr = {
+    id: string;
+    dniPersona: string;
+    urlImagen: string;
+    folio: number;
+    matricula: number;
+    fecha: string;
+    tags: string[];
+  };
   export type User ={
     userName: string;
     password:string;
