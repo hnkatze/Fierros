@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
 import { Button, Input, Radio, RadioGroup } from "@nextui-org/react";
-import { compressImage, parseTags } from "@/config/Util";
+import { compressImage, convertStringToTagsArray } from "@/config/Util";
 import Swal from "sweetalert2";
-import { NewFierro, NewPersona } from "@/config/type";
+import { NewFierroArr, NewPersona } from "@/config/type";
 import { createFierro, createPersona, getPersonaByDni, uploadImageAndGetUrl } from "@/config/crude";
 
 export default function New() {
@@ -52,9 +52,9 @@ export default function New() {
   
       const imageUrl = await uploadImageAndGetUrl(compressedImage,fecha);
   
-      const parsedTags = parseTags(tags);
+      const parsedTags = convertStringToTagsArray(tags.toLowerCase());
   
-      const fierro: NewFierro = {
+      const fierro: NewFierroArr = {
         folio: folio,
         matricula: matri,
         fecha: fecha,

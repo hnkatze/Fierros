@@ -15,7 +15,7 @@ const Find: React.FC = () => {
     try {
       const pero = await getPersonaByDni(dni);
       const fierros = await getFierrosByDniPersona(dni);
-      console.log('fierros:', fierros);
+  
 
       if (!fierros || fierros.length === 0) {
         Swal.fire({
