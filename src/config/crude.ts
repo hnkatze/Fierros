@@ -180,22 +180,22 @@ export async function getFierrosByKeyword(keyword: string): Promise<Fierro[]> {
 
   return fierros;
 }
-export async function convertTagsToStringArray() {
-  const fierrosRef = collection(db, "fierros");
-  const querySnapshot = await getDocs(fierrosRef);
+// export async function convertTagsToStringArray() {
+//   const fierrosRef = collection(db, "fierros");
+//   const querySnapshot = await getDocs(fierrosRef);
 
-  for (const docSnapshot of querySnapshot.docs) {
-    const fierroData = docSnapshot.data() as Fierro;
+//   for (const docSnapshot of querySnapshot.docs) {
+//     const fierroData = docSnapshot.data() as Fierro;
 
-    if (Array.isArray(fierroData.tags) && fierroData.tags.length > 0 && typeof (fierroData.tags[0] as Tags).tag === 'string') {
-      // Convertir los tags a un arreglo de strings en minúsculas
-      const tagsArray = (fierroData.tags as Tags[]).map((tag: Tags) => tag.tag.toLowerCase());
+//     if (Array.isArray(fierroData.tags) && fierroData.tags.length > 0 && typeof (fierroData.tags[0] as Tags).tag === 'string') {
+//       // Convertir los tags a un arreglo de strings en minúsculas
+//       const tagsArray = (fierroData.tags as Tags[]).map((tag: Tags) => tag.tag.toLowerCase());
 
-      // Actualizar el documento
-      const fierroDocRef = doc(db, "fierros", docSnapshot.id);
-      await updateDoc(fierroDocRef, { tags: tagsArray });
+//       // Actualizar el documento
+//       const fierroDocRef = doc(db, "fierros", docSnapshot.id);
+//       await updateDoc(fierroDocRef, { tags: tagsArray });
 
-      console.log(`Documento ${docSnapshot.id} actualizado con nuevos tags en minúsculas: `, tagsArray);
-    }
-  }
-}
+//       console.log(`Documento ${docSnapshot.id} actualizado con nuevos tags en minúsculas: `, tagsArray);
+//     }
+//   }
+// }
