@@ -41,7 +41,7 @@ export type NewPersona = {
     folio: number;
     matricula: number;
     fecha: string;
-    tags: Tags[] | string[];
+    tags:  string[];
   };
   
   export type FierroArr = {
