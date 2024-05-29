@@ -199,3 +199,10 @@ export async function getFierrosByKeyword(keyword: string): Promise<Fierro[]> {
 //     }
 //   }
 // }
+export async function checkUserExists(userName: string, password: string): Promise<boolean> {
+  const usersRef = collection(db, "usuarios");
+  const q = query(usersRef, where("userName", "==", userName), where("password", "==", password));
+  const querySnapshot = await getDocs(q);
+
+  return !querySnapshot.empty;
+}
