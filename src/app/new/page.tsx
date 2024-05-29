@@ -1,10 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Input, Radio, RadioGroup } from "@nextui-org/react";
 import { compressImage, convertStringToTagsArray } from "@/config/Util";
 import Swal from "sweetalert2";
 import { NewFierroArr, NewPersona } from "@/config/type";
 import { createFierro, createPersona, getPersonaByDni, uploadImageAndGetUrl } from "@/config/crude";
+
 
 export default function New() {
   const [dni, setDni] = useState<string>("");
@@ -19,6 +20,8 @@ export default function New() {
   const [disable, setDisable] = useState<boolean>(selected === "1");
   const [formDisable, setFormDisable] = useState<boolean>(true);
   const [dniPersona, setDniPersona] = useState<string>("");
+
+ 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
