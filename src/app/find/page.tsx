@@ -8,7 +8,7 @@ import { Persona } from "@/config/type";
 
 const Find: React.FC = () => {
   const [dni, setDni] = useState<string>("");
-  const [fierrosData, setFierrosData] = useState<{ url: string; fecha: string; folio: number; id:string }[]>([]);
+  const [fierrosData, setFierrosData] = useState<{ url: string; fecha: string; folio: number; id:string, comentario:string }[]>([]);
   const [per, setPer] = useState<Persona | null>(null);
 
   const handleFierro = async () => {
