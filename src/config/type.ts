@@ -5,16 +5,12 @@ export type NewPersona = {
     nombre: string;
     direccion: string;
   };
-
   export type Persona = {
     id:string;
     dni: string;
     nombre: string;
     direccion: string;
   };
-  
- 
-  
   export type NewFierro= {
     dniPersona:string;
     urlImagen:string;
@@ -22,6 +18,7 @@ export type NewPersona = {
     matricula: number;
     fecha: string;
     tags: Tags[];
+    comentario:string;
   };
   export type NewFierroArr= {
     dniPersona:string;
@@ -30,6 +27,7 @@ export type NewPersona = {
     matricula: number;
     fecha: string;
     tags: string[];
+    comentario:string;
   };
   export type Tags = {
     tag: string;
@@ -42,8 +40,8 @@ export type NewPersona = {
     matricula: number;
     fecha: string;
     tags:  string[];
+    comentario:string;
   };
-  
   export type FierroArr = {
     id: string;
     dniPersona: string;
@@ -52,6 +50,7 @@ export type NewPersona = {
     matricula: number;
     fecha: string;
     tags: string[];
+    comentario:string;
   };
   export type User ={
     userName: string;

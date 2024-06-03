@@ -14,6 +14,7 @@ export default function New() {
   const [matri, setMatri] = useState<number>(0);
   const [direc, setDirec] = useState<string>("");
   const [fecha, setFecha] = useState<string>("");
+  const [comment, setComment] = useState<string>("");
   const [tags, setTags] = useState<string>("");
   const [fot, setFot] = useState<File | null>(null);
   const [selected, setSelected] = useState<string>("1");
@@ -64,6 +65,7 @@ export default function New() {
         tags: parsedTags,
         dniPersona: dniPersona,
         urlImagen: imageUrl,
+        comentario: comment
       };
   
       await createFierro(fierro);
@@ -264,6 +266,14 @@ export default function New() {
               value={tags}
               onChange={(e) => setTags(e.target.value)}
               placeholder="alas,escudo"
+            />
+             <Input
+              isDisabled={formDisable}
+              type="text"
+              label="Comentario"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="Paso a "
             />
             <input
               disabled={formDisable}
