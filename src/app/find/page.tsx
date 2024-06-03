@@ -30,7 +30,8 @@ const Find: React.FC = () => {
         url: fierro.urlImagen,
         fecha: fierro.fecha,
         folio: fierro.folio,
-        id: fierro.id
+        id: fierro.id,
+        comentario: fierro.comentario
       }));
       setPer(pero)
       setFierrosData(data);
