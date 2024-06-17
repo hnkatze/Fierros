@@ -1,39 +1,76 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, Input, Radio, RadioGroup } from "@nextui-org/react";
-import { compressImage, convertStringToTagsArray } from "@/config/Util";
+import {
+  compressImage,
+  convertStringToTagsArray,
+  delayedReload,
+} from "@/config/Util";
 import Swal from "sweetalert2";
-import { NewFierroArr, NewPersona } from "@/config/type";
-import { createFierro, createPersona, getPersonaByDni, uploadImageAndGetUrl } from "@/config/crude";
-
+import { v4 as uuidv4 } from "uuid";
+import {
+  CustomFormData,
+  CustomPerson,
+  NewFierroArr,
+  NewPersona,
+} from "@/config/type";
+import {
+  createFierro,
+  createPersona,
+  getPersonaByDni,
+  uploadImageAndGetUrl,
+} from "@/config/crude";
 
 export default function New() {
-  const [dni, setDni] = useState<string>("");
-  const [nombre, setNombre] = useState<string>("");
-  const [folio, setFolio] = useState<number>(0);
-  const [matri, setMatri] = useState<number>(0);
-  const [direc, setDirec] = useState<string>("");
-  const [fecha, setFecha] = useState<string>("");
-  const [comment, setComment] = useState<string>("");
-  const [tags, setTags] = useState<string>("");
-  const [fot, setFot] = useState<File | null>(null);
+  const [formValue, setFormValue] = useState<CustomFormData>({
+    dni: "",
+    folio: 0,
+    matricula: 0,
+    fecha: "",
+    comentario: "",
+    tags: "",
+    fot: null,
+  });
+  const [FormPersona, setFormPersona] = useState<CustomPerson>({
+    dni: "",
+    nombre: "",
+    direccion: "",
+  });
   const [selected, setSelected] = useState<string>("1");
   const [disable, setDisable] = useState<boolean>(selected === "1");
   const [formDisable, setFormDisable] = useState<boolean>(true);
-  const [dniPersona, setDniPersona] = useState<string>("");
 
- 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormValue((prevFormValue) => ({
+      ...prevFormValue,
+      [name]: value,
+    }));
+  };
+  const handleInputChangePersona = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormPersona((prevFormValue) => ({
+      ...prevFormValue,
+      [name]: value,
+    }));
+  };
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
     if (file) {
-      setFot(file);
+      setFormValue((prevFormValue) => ({
+        ...prevFormValue,
+        fot: file,
+      }));
       const reader = new FileReader();
       reader.onloadend = async () => {
         try {
           const compressedFile = await compressImage(file);
-          setFot(compressedFile);
+          setFormValue((prevFormValue) => ({
+            ...prevFormValue,
+            fot: compressedFile,
+          }));
         } catch (error) {
           console.error("Error comprimiendo la imagen:", error);
         }
@@ -41,9 +78,10 @@ export default function New() {
       reader.readAsDataURL(file);
     }
   };
-  const handleFierro = async () => {
+  const handleFierro = async (e: React.FormEvent) => {
     try {
-      if (!fot) {
+      e.preventDefault();
+      if (!formValue.fot) {
         Swal.fire({
           title: "Opps!",
           text: "Debe seleccionar una imagen",
@@ -51,41 +89,36 @@ export default function New() {
         });
         return;
       }
-  
-      const compressedImage = await compressImage(fot);
-  
-      const imageUrl = await uploadImageAndGetUrl(compressedImage,fecha);
-  
-      const parsedTags = convertStringToTagsArray(tags.toLowerCase());
-  
-      const fierro: NewFierroArr = {
-        folio: folio,
-        matricula: matri,
-        fecha: fecha,
-        tags: parsedTags,
-        dniPersona: dniPersona,
-        urlImagen: imageUrl,
-        comentario: comment
-      };
-  
-      await createFierro(fierro);
 
-      Swal.fire({
-        title: "Éxito",
-        text: "Los datos han sido guardados correctamente",
-        icon: "success",
+      const compressedImage = await compressImage(formValue.fot);
+      const uniqueFileName = `${uuidv4()}-${formValue.fot?.name}`;
+      const imageUrl = await uploadImageAndGetUrl(
+        compressedImage,
+        uniqueFileName
+      );
+
+      const parsedTags = convertStringToTagsArray(formValue.tags.toLowerCase());
+
+      const fierro: NewFierroArr = {
+        folio: formValue.folio,
+        matricula: formValue.matricula,
+        fecha: formValue.fecha,
+        tags: parsedTags,
+        dniPersona: formValue.dni,
+        urlImagen: imageUrl,
+        comentario: formValue.comentario,
+      };
+
+      await createFierro(fierro).then(() => {
+        Swal.fire({
+          title: "Éxito",
+          text: "Los datos han sido guardados correctamente",
+          icon: "success",
+        });
+        delayedReload().then(() => {
+          window.location.reload();
+        });
       });
-  
-      setDni("");
-      setNombre("");
-      setFolio(0);
-      setMatri(0);
-      setDirec("");
-      setFecha("");
-      setTags("");
-      setFot(null);
-      setFormDisable(true);
-      setDniPersona("");
     } catch (error) {
       Swal.fire({
         title: "Opps!",
@@ -94,21 +127,22 @@ export default function New() {
       });
     }
   };
- 
-  const handlePersona = async () => {
+  const handlePersona = async (e: React.FormEvent) => {
     try {
-      if(dni === ""){
+      e.preventDefault();
+      if (FormPersona.dni === "") {
+        console.log("persona", FormPersona);
         Swal.fire({
-          title: "De Que Va Esto?", 
+          title: "De Que Va Esto?",
           text: "Parece Que no Ingresaste ningun DNI",
           icon: "error",
-        });  
-        return
+        });
+        return;
       }
       const persona: NewPersona = {
-        nombre: nombre,
-        dni: dni,
-        direccion: direc,
+        nombre: FormPersona.nombre,
+        dni: FormPersona.dni,
+        direccion: FormPersona.direccion,
       };
 
       const existingPersona = await getPersonaByDni(persona.dni);
@@ -119,7 +153,11 @@ export default function New() {
             const result = await createPersona(persona);
             if (result !== "") {
               setFormDisable(false);
-              setDniPersona(persona.dni);
+              setFormValue((prevFormValue) => ({
+                ...prevFormValue,
+                dni: persona.dni,
+              }));
+              setDisable(true);
             }
           } catch (createError) {
             Swal.fire({
@@ -138,10 +176,15 @@ export default function New() {
       } else {
         if (existingPersona !== null) {
           setFormDisable(false);
-          setDniPersona(existingPersona.dni);
-          setNombre(existingPersona.nombre);
-          setDirec(existingPersona.direccion);
-          setDni(existingPersona.dni);
+          setFormValue((prevFormValue) => ({
+            ...prevFormValue,
+            dni: persona.dni,
+          }));
+          setFormPersona({
+            dni: existingPersona.dni,
+            nombre: existingPersona.nombre,
+            direccion: existingPersona.direccion,
+          });
         } else {
           Swal.fire({
             title: "Opps!",
@@ -158,7 +201,6 @@ export default function New() {
       });
     }
   };
-
   const handleRadioChange = (value: string) => {
     setSelected(value);
     setDisable(value === "1");
@@ -176,6 +218,7 @@ export default function New() {
             value={selected}
             onValueChange={handleRadioChange}
             orientation="horizontal"
+            name="radioGroup"
           >
             <Radio value={"1"}>
               <span className="font-bold text-white">Existente</span>
@@ -185,42 +228,45 @@ export default function New() {
             </Radio>
           </RadioGroup>
           <form
-            action="submit"
+            onSubmit={handlePersona}
             className="flex flex-col justify-end items-center w-72 gap-3"
           >
             <span className="uppercase text-center font-bold text-white underline w-2/4">
               Contribuyente
             </span>
             <Input
-            isRequired
+              isRequired
               type="text"
               label="DNI"
-              value={dni}
-              onChange={(e) => setDni(e.target.value)}
+              value={FormPersona.dni}
+              onChange={handleInputChangePersona}
               placeholder="0210"
+              name="dni"
             />
             <Input
               type="text"
               isDisabled={disable}
               label="Nombre"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
+              value={FormPersona.nombre}
+              onChange={handleInputChangePersona}
               placeholder="Juana de Arcos"
+              name="nombre"
             />
             <Input
               type="text"
               label="Direccion"
               isDisabled={disable}
-              value={direc}
-              onChange={(e) => setDirec(e.target.value)}
+              value={FormPersona.direccion}
+              onChange={handleInputChangePersona}
               placeholder="El 5"
+              name="direccion"
             />
             <Button
               color="secondary"
               href="/"
+              type="submit"
               variant="flat"
               className="text-white font-bold"
-              onClick={() => handlePersona()}
             >
               {disable ? "Cargar" : "Agregar"}
             </Button>
@@ -228,59 +274,74 @@ export default function New() {
         </div>
         <div className="w-1/4">
           <form
-            action="submit"
+            onSubmit={handleFierro}
             className="flex flex-col justify-center items-center gap-3 w-72"
           >
             <span className="uppercase text-center font-bold text-white underline">
               Datos De La Marca
             </span>
-            <span className="uppercase text-center font-bold text-white ">
-              DNI:{dniPersona}
-            </span>
+            <Input
+              className="hidden"
+              isDisabled={disable}
+              type="text"
+              label="DNI"
+              defaultValue={FormPersona.dni}
+              value={FormPersona.dni}
+              name="dni"
+            />
             <Input
               isDisabled={formDisable}
               type="number"
               label="Folio"
-              value={folio.toString()}
-              onChange={(e) => setFolio(parseInt(e.target.value))}
+              value={formValue.folio.toString()}
+              onChange={handleInputChange}
+              name="folio"
             />
             <Input
               isDisabled={formDisable}
               type="number"
               label="Matricula"
-              value={matri.toString()}
-              onChange={(e) => setMatri(parseInt(e.target.value))}
+              value={formValue.matricula.toString()}
+              onChange={handleInputChange}
+              name="matricula"
             />
 
             <Input
               isDisabled={formDisable}
               type="date"
               label="Fecha"
-              value={fecha}
-              onChange={(e) => setFecha(e.target.value)}
+              value={formValue.fecha}
+              onChange={handleInputChange}
+              name="fecha"
             />
             <Input
               isDisabled={formDisable}
               type="text"
               label="Descripcion"
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
+              value={formValue.tags}
+              onChange={handleInputChange}
               placeholder="alas,escudo"
+              name="tags"
             />
-             <Input
+            <Input
               isDisabled={formDisable}
               type="text"
               label="Comentario"
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
+              value={formValue.comentario}
+              onChange={handleInputChange}
               placeholder="Paso a "
+              name="comentario"
             />
             <input
               disabled={formDisable}
+              id="fot"
               type="file"
+              name="fot"
               accept="image/*"
               className="w-72"
               onChange={handleFileChange}
+              nonce="fot"
+              title="Selecciona una imagen"
             />
             <Button
               isDisabled={formDisable}
@@ -288,7 +349,8 @@ export default function New() {
               href="/"
               variant="flat"
               className="text-white font-bold"
-              onClick={() => handleFierro()}
+              type="submit"
+              onClick={handleFierro}
             >
               Agregar
             </Button>
