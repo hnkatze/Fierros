@@ -42,6 +42,15 @@ export async function getPersonaByDni(dni: string): Promise<Persona | null> {
   const persona = { id: doc.id, ...doc.data() } as Persona;
   return persona;
 }
+export async function updatePersonaById(personaId: string, updatedPersona: NewPersona): Promise<void> {
+  try {
+    const docRef = doc(db, "personas", personaId);
+    await updateDoc(docRef, updatedPersona);
+    console.log("Persona actualizada con ID: ", personaId);
+  } catch (e) {
+    console.error("Error al actualizar la persona: ", e);
+  }
+}
 export async function createFierro(newFierro: NewFierroArr): Promise<void> {
   try {
     const docRef = await addDoc(collection(db, "fierros"), newFierro);

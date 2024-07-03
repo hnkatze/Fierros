@@ -24,6 +24,9 @@ interface Link {
       label: "Contacto",
       href: "/contac"
     },
-  
+    {
+      label: "Contribuyentes",
+      href: "/contribu"
+    },
     
   ];
