@@ -1,7 +1,7 @@
 "use client";
 import { getFierrosByKeyword } from "@/config/crude";
 import { Fierro } from "@/config/type";
-import { Button, Image, Input, Link } from "@nextui-org/react";
+import { Button, Image, Input, Link, Tooltip } from "@nextui-org/react";
 import { useState } from "react";
 import { FaEye } from "react-icons/fa";
 
@@ -103,12 +103,13 @@ export default function New() {
           </Button>
         </div>
       </div>
-      <div className="flex flex-wrap gap-5 w-full">
+      <div className="flex flex-wrap gap-5 items-center w-full mx-auto">
         {filteredData.map((image, index) => (
           <div
             key={index}
             className="relative rounded-lg flex flex-col justify-center items-center w-2/12"
           >
+            <Tooltip content={image.dniPersona}>
             <Image
               isZoomed={true}
               className="block"
@@ -118,18 +119,7 @@ export default function New() {
               height={200}
               src={image.urlImagen}
             />
-            <Link
-              isExternal
-              showAnchorIcon
-              href={image.urlImagen}
-              anchorIcon={
-                <FaEye
-                  color="white"
-                  className=" border  w-12 h-12 rounded-full"
-                />
-              }
-              className=" items-center justify-center rounded-full absolute translate-y-24 z-10"
-            ></Link>
+            </Tooltip>
           </div>
         ))}
       </div>
