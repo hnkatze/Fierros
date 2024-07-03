@@ -28,13 +28,13 @@ export default function New() {
       console.error("Error fetching fierros:", error);
     }
   };
-  
+
   const clear = () => {
     setTags("");
     setFiltro("");
     setDisable(false);
     setSSDisable(true);
-    setFilteredData([])
+    setFilteredData([]);
   };
 
   const handleFiltroChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +68,7 @@ export default function New() {
             className="h-10 text-center"
             label="Palabra Clave"
             value={tags}
-            onChange={(e) => setTags(e.target.value)}
+            onChange={(e) => setTags(e.target.value.toLocaleLowerCase())}
             placeholder="alas"
           />
           <Button
