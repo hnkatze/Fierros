@@ -1,9 +1,19 @@
 "use client";
 import { getFierrosByKeyword } from "@/config/crude";
 import { Fierro } from "@/config/type";
-import { Button, Image, Input, Link, Tooltip } from "@nextui-org/react";
+import {
+  Button,
+  Image,
+  Input,
+  Link,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  Tooltip,
+  useDisclosure,
+} from "@nextui-org/react";
 import { useState } from "react";
-import { FaEye } from "react-icons/fa";
 
 export default function New() {
   const [tags, setTags] = useState<string>("");
@@ -12,7 +22,8 @@ export default function New() {
   const [ssdisable, setSSDisable] = useState<boolean>(true);
   const [filteredData, setFilteredData] = useState<Fierro[]>([]);
   const [urls, setUrls] = useState<Fierro[]>([]);
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [OnlyImage, setOnlyImage] = useState<string>("");
   const handleFierro = async () => {
     try {
       const fierrosfil = await getFierrosByKeyword(tags);
@@ -20,7 +31,7 @@ export default function New() {
         setUrls(fierrosfil);
         setSSDisable(false);
         setDisable(true);
-        setFilteredData(fierrosfil); // Aplicar filtrado de tags después de obtener los datos
+        setFilteredData(fierrosfil);
       } else {
         setUrls([]);
       }
@@ -45,8 +56,7 @@ export default function New() {
 
   const filterData = (filtroValue: string) => {
     if (!filtroValue.trim()) {
-      // Verifica si el valor del filtro está vacío o solo contiene espacios en blanco
-      setFilteredData(urls); // Si está vacío, muestra todos los datos sin filtrar
+      setFilteredData(urls);
     } else {
       const filtered = urls.filter((item) =>
         item.tags.some((tag) =>
@@ -56,73 +66,98 @@ export default function New() {
       setFilteredData(filtered);
     }
   };
+  const openModal = (url: string) => {
+    setOnlyImage(url);
+    onOpen();
+  };
 
   return (
-    <main className="flex flex-col w-full h-screen">
-      <div className=" flex flex-col justify-center items-center w-full h-64 ">
-        <div className=" flex  flex-row  gap-3 items-center">
+    <main className='flex flex-col w-full h-screen'>
+      <div className=' flex flex-col justify-center items-center w-full h-64 '>
+        <div className=' flex  flex-row  gap-3 items-center'>
           <Input
             isDisabled={disable}
             isRequired
-            type="text"
-            className="h-10 text-center"
-            label="Palabra Clave"
+            type='text'
+            className='h-10 text-center'
+            label='Palabra Clave'
             value={tags}
             onChange={(e) => setTags(e.target.value.toLocaleLowerCase())}
-            placeholder="alas"
+            placeholder='alas'
           />
           <Button
             isDisabled={disable}
-            color="secondary"
-            variant="flat"
-            className="text-white font-bold"
-            onClick={handleFierro}
-          >
+            color='secondary'
+            variant='flat'
+            className='text-white font-bold'
+            onClick={handleFierro}>
             Buscar
           </Button>
         </div>
-        <div className=" flex justify-center items-center gap-3 w-full h-36 ">
+        <div className=' flex justify-center items-center gap-3 w-full h-36 '>
           <Input
             isDisabled={ssdisable}
             isRequired
-            type="text"
-            className="h-10 w-52 text-center"
-            label="Filtrar "
+            type='text'
+            className='h-10 w-52 text-center'
+            label='Filtrar '
             value={filtro}
             onChange={handleFiltroChange}
-            placeholder="r"
+            placeholder='r'
           />
           <Button
             isDisabled={ssdisable}
-            color="danger"
-            variant="shadow"
-            className="text-white w-5 font-bold"
-            onClick={clear}
-          >
+            color='danger'
+            variant='shadow'
+            className='text-white w-5 font-bold'
+            onClick={clear}>
             Limpiar
           </Button>
         </div>
       </div>
-      <div className="flex flex-wrap gap-5 items-center w-full mx-auto">
+      <div className='flex flex-wrap gap-5 justify-center items-center w-full mx-auto'>
         {filteredData.map((image, index) => (
           <div
             key={index}
-            className="relative rounded-lg flex flex-col justify-center items-center w-2/12"
-          >
+            className='relative rounded-lg flex flex-col justify-center items-center w-2/12'>
             <Tooltip content={image.dniPersona}>
-            <Image
-              isZoomed={true}
-              className="block"
-              key={index}
-              alt={image.fecha}
-              width={200}
-              height={200}
-              src={image.urlImagen}
-            />
+              <Image
+                isZoomed={true}
+                className='block'
+                key={index}
+                alt={image.fecha}
+                width={200}
+                height={200}
+                src={image.urlImagen}
+                onClick={() => openModal(image.urlImagen)}
+              />
             </Tooltip>
           </div>
         ))}
       </div>
+      <Modal isOpen={isOpen} onClose={onClose} size='2xl' backdrop='blur'>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalBody className='flex flex-col justify-center items-center pt-10 w-full'>
+                <Image
+                  isZoomed={true}
+                  className='block'
+                  alt='Zoom Image'
+                  width={600}
+                  height={600}
+                  src={OnlyImage}
+                />
+              </ModalBody>
+              <ModalFooter>
+                <Button color='danger' variant='light' onPress={onClose}>
+                  Cerrar
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </main>
   );
 }

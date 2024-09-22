@@ -131,7 +131,6 @@ export default function New() {
     try {
       e.preventDefault();
       if (FormPersona.dni === "") {
-        console.log("persona", FormPersona);
         Swal.fire({
           title: "De Que Va Esto?",
           text: "Parece Que no Ingresaste ningun DNI",
@@ -206,152 +205,147 @@ export default function New() {
     setDisable(value === "1");
   };
   return (
-    <main className="flex flex-col justify-center items-center w-full h-5/6">
-      <div className="w-full h-10 flex justify-center items-center">
-        <div className="w-52"></div>
-        <div className="flex justify-center w-2/4"> </div>
-        <div className=" w-2/4"></div>
+    <main className='flex flex-col justify-center items-center w-full h-5/6'>
+      <div className='w-full h-10 flex justify-center items-center'>
+        <div className='w-52'></div>
+        <div className='flex justify-center w-2/4'> </div>
+        <div className=' w-2/4'></div>
       </div>
-      <div className="w-full flex flex-row justify-center items-start ">
-        <div className="w-1/4 flex flex-col justify-center items-center">
+      <div className='w-full flex flex-row justify-center items-start '>
+        <div className='w-1/4 flex flex-col justify-center items-center'>
           <RadioGroup
             value={selected}
             onValueChange={handleRadioChange}
-            orientation="horizontal"
-            name="radioGroup"
-          >
+            orientation='horizontal'
+            name='radioGroup'>
             <Radio value={"1"}>
-              <span className="font-bold text-white">Existente</span>
+              <span className='font-bold text-white'>Existente</span>
             </Radio>
             <Radio value={"2"}>
-              <span className="font-bold text-white">Nuevo</span>
+              <span className='font-bold text-white'>Nuevo</span>
             </Radio>
           </RadioGroup>
           <form
             onSubmit={handlePersona}
-            className="flex flex-col justify-end items-center w-72 gap-3"
-          >
-            <span className="uppercase text-center font-bold text-white underline w-2/4">
+            className='flex flex-col justify-end items-center w-72 gap-3'>
+            <span className='uppercase text-center font-bold text-white underline w-2/4'>
               Contribuyente
             </span>
             <Input
               isRequired
-              type="text"
-              label="DNI"
+              type='text'
+              label='DNI'
               value={FormPersona.dni}
               onChange={handleInputChangePersona}
-              placeholder="0210"
-              name="dni"
+              placeholder='0210'
+              name='dni'
             />
             <Input
-              type="text"
+              type='text'
               isDisabled={disable}
-              label="Nombre"
+              label='Nombre'
               value={FormPersona.nombre}
               onChange={handleInputChangePersona}
-              placeholder="Juana de Arcos"
-              name="nombre"
+              placeholder='Juana de Arcos'
+              name='nombre'
             />
             <Input
-              type="text"
-              label="Direccion"
+              type='text'
+              label='Direccion'
               isDisabled={disable}
               value={FormPersona.direccion}
               onChange={handleInputChangePersona}
-              placeholder="El 5"
-              name="direccion"
+              placeholder='El 5'
+              name='direccion'
             />
             <Button
-              color="secondary"
-              href="/"
-              type="submit"
-              variant="flat"
-              className="text-white font-bold"
-            >
+              color='secondary'
+              href='/'
+              type='submit'
+              variant='flat'
+              className='text-white font-bold'>
               {disable ? "Cargar" : "Agregar"}
             </Button>
           </form>
         </div>
-        <div className="w-1/4">
+        <div className='w-1/4'>
           <form
             onSubmit={handleFierro}
-            className="flex flex-col justify-center items-center gap-3 w-72"
-          >
-            <span className="uppercase text-center font-bold text-white underline">
+            className='flex flex-col justify-center items-center gap-3 w-72'>
+            <span className='uppercase text-center font-bold text-white underline'>
               Datos De La Marca
             </span>
             <Input
-              className="hidden"
+              className='hidden'
               isDisabled={disable}
-              type="text"
-              label="DNI"
+              type='text'
+              label='DNI'
               defaultValue={FormPersona.dni}
               value={FormPersona.dni}
-              name="dni"
+              name='dni'
             />
             <Input
               isDisabled={formDisable}
-              type="number"
-              label="Folio"
+              type='number'
+              label='Folio'
               value={formValue.folio.toString()}
               onChange={handleInputChange}
-              name="folio"
+              name='folio'
             />
             <Input
               isDisabled={formDisable}
-              type="number"
-              label="Matricula"
+              type='number'
+              label='Matricula'
               value={formValue.matricula.toString()}
               onChange={handleInputChange}
-              name="matricula"
+              name='matricula'
             />
 
             <Input
               isDisabled={formDisable}
-              type="date"
-              label="Fecha"
+              type='date'
+              label='Fecha'
               value={formValue.fecha}
               onChange={handleInputChange}
-              name="fecha"
+              name='fecha'
             />
             <Input
               isDisabled={formDisable}
-              type="text"
-              label="Descripcion"
+              type='text'
+              label='Descripcion'
               value={formValue.tags}
               onChange={handleInputChange}
-              placeholder="alas,escudo"
-              name="tags"
+              placeholder='alas,escudo'
+              name='tags'
             />
             <Input
               isDisabled={formDisable}
-              type="text"
-              label="Comentario"
+              type='text'
+              label='Comentario'
               value={formValue.comentario}
               onChange={handleInputChange}
-              placeholder="Paso a "
-              name="comentario"
+              placeholder='Paso a '
+              name='comentario'
             />
             <input
               disabled={formDisable}
-              id="fot"
-              type="file"
-              name="fot"
-              accept="image/*"
-              className="w-72"
+              id='fot'
+              type='file'
+              name='fot'
+              accept='image/*'
+              className='w-72'
               onChange={handleFileChange}
-              nonce="fot"
-              title="Selecciona una imagen"
+              nonce='fot'
+              title='Selecciona una imagen'
             />
             <Button
               isDisabled={formDisable}
-              color="secondary"
-              href="/"
-              variant="flat"
-              className="text-white font-bold"
-              type="submit"
-              onClick={handleFierro}
-            >
+              color='secondary'
+              href='/'
+              variant='flat'
+              className='text-white font-bold'
+              type='submit'
+              onClick={handleFierro}>
               Agregar
             </Button>
           </form>

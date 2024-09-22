@@ -27,7 +27,6 @@ const Find: React.FC = () => {
       e.preventDefault();
       const pero = await getPersonaByDni(dni.dni);
       const fierros = await getFierrosByDniPersona(dni.dni);
-
       if (!fierros || fierros.length === 0) {
         Swal.fire({
           icon: "warning",
@@ -57,41 +56,38 @@ const Find: React.FC = () => {
   };
 
   return (
-    <>
-      <div className="w-full h-screen flex flex-col justify-center items-center">
-        <form onSubmit={handleFierro}>
-          <div className="w-72 flex h-10">
-            <Input
-              type="string"
-              isDisabled={false}
-              label="DNI"
-              name="dni"
-              value={dni.dni}
-              onChange={handleInputChange}
-              placeholder="0210199"
-            />
-            <Button
-              color="secondary"
-              variant="flat"
-              className="text-white font-bold"
-              type="submit"
-            >
-              Buscar
-            </Button>
-          </div>
-        </form>
-        <div className=" flex flex-row gap-8">
-          <div className="text-white font-semibold flex flex-col pt-4">
-            <span className="text-3xl">{per?.nombre}</span>
-            <span className="text-2xl">{per?.dni}</span>
-            <span className="text-xl">{per?.direccion}</span>
-          </div>
-          <div className=" w-72 pt-6  ">
-            <ImageSlider data={fierrosData} />
-          </div>
+    <div className='w-full h-screen flex flex-col justify-center items-center'>
+      <form onSubmit={handleFierro}>
+        <div className='w-72 flex h-10'>
+          <Input
+            type='string'
+            isDisabled={false}
+            label='DNI'
+            name='dni'
+            value={dni.dni}
+            onChange={handleInputChange}
+            placeholder='0210199'
+          />
+          <Button
+            color='secondary'
+            variant='flat'
+            className='text-white font-bold'
+            type='submit'>
+            Buscar
+          </Button>
+        </div>
+      </form>
+      <div className=' flex flex-row gap-8'>
+        <div className='text-white font-semibold flex flex-col pt-4'>
+          <span className='text-3xl'>{per?.nombre}</span>
+          <span className='text-2xl'>{per?.dni}</span>
+          <span className='text-xl'>{per?.direccion}</span>
+        </div>
+        <div className=' w-72 pt-6  '>
+          <ImageSlider data={fierrosData} />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
