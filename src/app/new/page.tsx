@@ -20,6 +20,7 @@ import {
   getPersonaByDni,
   uploadImageAndGetUrl,
 } from "@/config/crude";
+import "./custom.css";
 
 export default function New() {
   const [formValue, setFormValue] = useState<CustomFormData>({
@@ -205,152 +206,177 @@ export default function New() {
     setDisable(value === "1");
   };
   return (
-    <main className='flex flex-col justify-center items-center w-full h-5/6'>
-      <div className='w-full h-10 flex justify-center items-center'>
-        <div className='w-52'></div>
-        <div className='flex justify-center w-2/4'> </div>
-        <div className=' w-2/4'></div>
-      </div>
-      <div className='w-full flex flex-row justify-center items-start '>
-        <div className='w-1/4 flex flex-col justify-center items-center'>
-          <RadioGroup
-            value={selected}
-            onValueChange={handleRadioChange}
-            orientation='horizontal'
-            name='radioGroup'>
-            <Radio value={"1"}>
-              <span className='font-bold text-white'>Existente</span>
-            </Radio>
-            <Radio value={"2"}>
-              <span className='font-bold text-white'>Nuevo</span>
-            </Radio>
-          </RadioGroup>
-          <form
-            onSubmit={handlePersona}
-            className='flex flex-col justify-end items-center w-72 gap-3'>
-            <span className='uppercase text-center font-bold text-white underline w-2/4'>
-              Contribuyente
-            </span>
-            <Input
-              isRequired
-              type='text'
-              label='DNI'
-              value={FormPersona.dni}
-              onChange={handleInputChangePersona}
-              placeholder='0210'
-              name='dni'
-            />
-            <Input
-              type='text'
-              isDisabled={disable}
-              label='Nombre'
-              value={FormPersona.nombre}
-              onChange={handleInputChangePersona}
-              placeholder='Juana de Arcos'
-              name='nombre'
-            />
-            <Input
-              type='text'
-              label='Direccion'
-              isDisabled={disable}
-              value={FormPersona.direccion}
-              onChange={handleInputChangePersona}
-              placeholder='El 5'
-              name='direccion'
-            />
-            <Button
-              color='secondary'
-              href='/'
-              type='submit'
-              variant='flat'
-              className='text-white font-bold'>
-              {disable ? "Cargar" : "Agregar"}
-            </Button>
-          </form>
-        </div>
-        <div className='w-1/4'>
-          <form
-            onSubmit={handleFierro}
-            className='flex flex-col justify-center items-center gap-3 w-72'>
-            <span className='uppercase text-center font-bold text-white underline'>
-              Datos De La Marca
-            </span>
-            <Input
-              className='hidden'
-              isDisabled={disable}
-              type='text'
-              label='DNI'
-              defaultValue={FormPersona.dni}
-              value={FormPersona.dni}
-              name='dni'
-            />
-            <Input
-              isDisabled={formDisable}
-              type='number'
-              label='Folio'
-              value={formValue.folio.toString()}
-              onChange={handleInputChange}
-              name='folio'
-            />
-            <Input
-              isDisabled={formDisable}
-              type='number'
-              label='Matricula'
-              value={formValue.matricula.toString()}
-              onChange={handleInputChange}
-              name='matricula'
-            />
-
-            <Input
-              isDisabled={formDisable}
-              type='date'
-              label='Fecha'
-              value={formValue.fecha}
-              onChange={handleInputChange}
-              name='fecha'
-            />
-            <Input
-              isDisabled={formDisable}
-              type='text'
-              label='Descripcion'
-              value={formValue.tags}
-              onChange={handleInputChange}
-              placeholder='alas,escudo'
-              name='tags'
-            />
-            <Input
-              isDisabled={formDisable}
-              type='text'
-              label='Comentario'
-              value={formValue.comentario}
-              onChange={handleInputChange}
-              placeholder='Paso a '
-              name='comentario'
-            />
-            <input
-              disabled={formDisable}
-              id='fot'
-              type='file'
-              name='fot'
-              accept='image/*'
-              className='w-72'
-              onChange={handleFileChange}
-              nonce='fot'
-              title='Selecciona una imagen'
-            />
-            <Button
-              isDisabled={formDisable}
-              color='secondary'
-              href='/'
-              variant='flat'
-              className='text-white font-bold'
-              type='submit'
-              onClick={handleFierro}>
-              Agregar
-            </Button>
-          </form>
+    <main className="min-h-screen bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto form-container">
+        <h1 className="form-title">Registro de Fierro</h1>
+        <div className="grid md:grid-cols-2 gap-8">
+          <div className="form-section">
+            <h2 className="form-section-title">Contribuyente</h2>
+            <RadioGroup
+              value={selected}
+              onValueChange={handleRadioChange}
+              orientation="horizontal"
+              classNames={{
+                wrapper: "custom-radio-group",
+              }}
+            >
+              <Radio value="1">
+                <span className={`custom-radio ${selected === "1" ? "bg-blue-500" : ""}`}>Existente</span>
+              </Radio>
+              <Radio value="2">
+                <span className={`custom-radio ${selected === "2" ? "bg-blue-500" : ""}`}>Nuevo</span>
+              </Radio>
+            </RadioGroup>
+            <form onSubmit={handlePersona} className="space-y-4">
+              <Input
+                isRequired
+                type="text"
+                label="DNI"
+                value={FormPersona.dni}
+                onChange={handleInputChangePersona}
+                placeholder="0210"
+                name="dni"
+                classNames={{
+                  input: "custom-input",
+                  label: "text-white",
+                }}
+              />
+              <Input
+                type="text"
+                isDisabled={disable}
+                label="Nombre"
+                value={FormPersona.nombre}
+                onChange={handleInputChangePersona}
+                placeholder="Juana de Arcos"
+                name="nombre"
+                classNames={{
+                  input: "custom-input",
+                  label: "text-white",
+                }}
+              />
+              <Input
+                type="text"
+                label="Dirección"
+                isDisabled={disable}
+                value={FormPersona.direccion}
+                onChange={handleInputChangePersona}
+                placeholder="El 5"
+                name="direccion"
+                classNames={{
+                  input: "custom-input",
+                  label: "text-white",
+                }}
+              />
+              <Button
+                type="submit"
+                className="custom-button w-full"
+              >
+                {disable ? "Cargar" : "Agregar"}
+              </Button>
+            </form>
+          </div>
+          <div className="form-section">
+            <h2 className="form-section-title">Datos De La Marca</h2>
+            <form onSubmit={handleFierro} className="space-y-4">
+              <Input
+                className="hidden"
+                isDisabled={disable}
+                type="text"
+                label="DNI"
+                defaultValue={FormPersona.dni}
+                value={FormPersona.dni}
+                name="dni"
+              />
+              <Input
+                isDisabled={formDisable}
+                type="number"
+                label="Folio"
+                value={formValue.folio.toString()}
+                onChange={handleInputChange}
+                name="folio"
+                classNames={{
+                  input: "custom-input",
+                  label: "text-white",
+                }}
+              />
+              <Input
+                isDisabled={formDisable}
+                type="number"
+                label="Matrícula"
+                value={formValue.matricula.toString()}
+                onChange={handleInputChange}
+                name="matricula"
+                classNames={{
+                  input: "custom-input",
+                  label: "text-white",
+                }}
+              />
+              <Input
+                isDisabled={formDisable}
+                type="date"
+                label="Fecha"
+                value={formValue.fecha}
+                onChange={handleInputChange}
+                name="fecha"
+                classNames={{
+                  input: "custom-input",
+                  label: "text-white",
+                }}
+              />
+              <Input
+                isDisabled={formDisable}
+                type="text"
+                label="Descripción"
+                value={formValue.tags}
+                onChange={handleInputChange}
+                placeholder="alas,escudo"
+                name="tags"
+                classNames={{
+                  input: "custom-input",
+                  label: "text-white",
+                }}
+              />
+              <Input
+                isDisabled={formDisable}
+                type="text"
+                label="Comentario"
+                value={formValue.comentario}
+                onChange={handleInputChange}
+                placeholder="Paso a "
+                name="comentario"
+                classNames={{
+                  input: "custom-input",
+                  label: "text-white",
+                }}
+              />
+              <div className="space-y-2">
+                <label htmlFor="fot" className="block text-sm font-medium text-white">
+                  Imagen
+                </label>
+                <input
+                  disabled={formDisable}
+                  id="fot"
+                  type="file"
+                  name="fot"
+                  accept="image/*"
+                  className="custom-file-input"
+                  onChange={handleFileChange}
+                  title="Selecciona una imagen"
+                />
+              </div>
+              <Button
+                isDisabled={formDisable}
+                type="submit"
+                className="custom-button w-full"
+                onClick={handleFierro}
+              >
+                Agregar
+              </Button>
+            </form>
+          </div>
         </div>
       </div>
     </main>
   );
 }
+

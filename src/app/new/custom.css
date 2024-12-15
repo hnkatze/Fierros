@@ -1,0 +1,40 @@
+
+.form-container {
+    @apply bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-lg shadow-2xl;
+  }
+  
+  .form-title {
+    @apply text-3xl font-bold text-center text-white mb-6;
+  }
+  
+  .form-section {
+    @apply bg-gray-700 p-6 rounded-lg mb-6;
+  }
+  
+  .form-section-title {
+    @apply text-xl font-semibold text-white mb-4;
+  }
+  
+  .custom-radio-group {
+    @apply flex space-x-4 mb-6;
+  }
+  
+  .custom-radio {
+    @apply bg-gray-600 text-white px-4 py-2 rounded-full cursor-pointer transition-colors duration-200;
+  }
+  
+  .custom-radio[data-selected="true"] {
+    @apply bg-blue-500;
+  }
+  
+  .custom-input {
+    @apply bg-gray-600 text-white border-gray-500 rounded-lg focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50;
+  }
+  
+  .custom-button {
+    @apply bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+  
+  .custom-file-input {
+    @apply block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600;
+  }
